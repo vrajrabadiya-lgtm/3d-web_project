@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { LogOut, CheckCircle, XCircle, Loader2, User } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5051";
 
 // ─── Toast Notification Component ────────────────────────────────────────────
 function Toast({ toasts }) {
-  return (
-    <div className="fixed top-6 right-4 z-[2000] flex flex-col gap-2 pointer-events-none">
+  return createPortal(
+    <div
+      style={{ position: "fixed", top: "24px", right: "16px", zIndex: 99999 }}
+      className="flex flex-col gap-2 pointer-events-none"
+    >
       {toasts.map((t) => (
         <div
           key={t.id}
-          className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border text-xs font-medium shadow-2xl backdrop-blur-md transition-all duration-300 pointer-events-auto
+          className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border text-xs font-medium shadow-2xl backdrop-blur-md pointer-events-auto
             ${t.type === "success"
               ? "bg-emerald-950/90 border-emerald-500/40 text-emerald-300"
               : "bg-red-950/90 border-red-500/40 text-red-300"
             }`}
+          style={{ minWidth: "220px", maxWidth: "320px" }}
         >
           {t.type === "success"
             ? <CheckCircle className="h-4 w-4 shrink-0" />
@@ -23,7 +28,8 @@ function Toast({ toasts }) {
           <span>{t.message}</span>
         </div>
       ))}
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -107,7 +113,14 @@ export default function Navbar() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = await res.json();
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        addToast("Server returned an unexpected response.", "error");
+        return;
+      }
 
       if (!res.ok) {
         addToast(data.message || "Something went wrong.", "error");
@@ -127,8 +140,12 @@ export default function Navbar() {
           : `Account created! Welcome, ${data.user.name}! 🎉`,
         "success"
       );
-    } catch {
-      addToast("Cannot connect to server. Try again.", "error");
+    } catch (err) {
+      if (err instanceof TypeError && err.message.includes("fetch")) {
+        addToast("Cannot reach server. Check your connection.", "error");
+      } else {
+        addToast("Something went wrong. Please try again.", "error");
+      }
     } finally {
       setLoading(false);
     }
