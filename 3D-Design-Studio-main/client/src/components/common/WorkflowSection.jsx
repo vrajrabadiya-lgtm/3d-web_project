@@ -78,7 +78,7 @@ export default function PipelineSection() {
     setFormStatus({ type: null, text: "" });
 
     try {
-      const response = await fetch("http://localhost:5051/api/contact", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5051"}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

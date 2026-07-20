@@ -134,7 +134,7 @@ export default function Builder() {
   const [isDeletingId, setIsDeletingId] = useState(null);
   const [apiStatus, setApiStatus] = useState({ type: null, message: "" });
 
-  const BACKEND_URL = "http://localhost:5051/api/designs";
+  const BACKEND_URL = `${import.meta.env.VITE_API_URL || "http://localhost:5051"}/api/designs`;
 
   // Fetch designs for the current user
   const fetchUserDesigns = async (targetUid = userId) => {
