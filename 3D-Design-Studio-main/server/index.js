@@ -17,13 +17,19 @@ const allowedOrigins = [
   "http://127.0.0.1:5173",
   "http://localhost:5174",
   "http://127.0.0.1:5174",
-  process.env.CLIENT_URL,           // Vercel frontend URL (set in Vercel dashboard)
+  process.env.CLIENT_URL,
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (e.g. curl, Postman, same-origin)
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (curl, Postman, same-origin) or allowed origins
+    // Also allow any vercel.app subdomain for preview deployments
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      /\.vercel\.app$/.test(origin) ||
+      /\.onrender\.com$/.test(origin)
+    ) {
       callback(null, true);
     } else {
       callback(new Error(`CORS: origin ${origin} not allowed`));
