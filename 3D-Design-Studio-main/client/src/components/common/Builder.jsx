@@ -115,7 +115,14 @@ function BuilderMesh({ config, rotateSpeed }) {
 export default function Builder() {
   // 1. Control State Variables
   const [activeSidebarTab, setActiveSidebarTab] = useState("colors");
-  const [userId, setUserId] = useState("user_demo");
+
+  // Read logged-in user from localStorage (set by Navbar auth)
+  const getLoggedInUser = () => {
+    try { return JSON.parse(localStorage.getItem("auth_user")) || null; }
+    catch { return null; }
+  };
+  const loggedInUser = getLoggedInUser();
+  const [userId, setUserId] = useState(loggedInUser?.id || loggedInUser?._id || "user_demo");
   const [designName, setDesignName] = useState("Cyber Torus");
   
   // Customization variables
@@ -237,8 +244,12 @@ export default function Builder() {
 
   // Fetch designs on mount and when userId changes
   useEffect(() => {
-    fetchUserDesigns();
-  }, [userId]);
+    // Always sync userId with latest logged-in user
+    const loggedIn = getLoggedInUser();
+    const resolvedId = loggedIn?.id || loggedIn?._id || "user_demo";
+    if (resolvedId !== userId) setUserId(resolvedId);
+    fetchUserDesigns(resolvedId);
+  }, []);
 
   // Quick auto-clean message after 4 seconds
   useEffect(() => {
@@ -588,16 +599,27 @@ export default function Builder() {
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider flex justify-between">
-                    <span>User Account Session ID</span>
-                    <span className="text-zinc-600 font-mono">Simulates Auth</span>
+                    <span>User Account</span>
+                    <span className={`font-mono ${loggedInUser ? "text-emerald-400" : "text-zinc-600"}`}>
+                      {loggedInUser ? "● Logged In" : "○ Demo Mode"}
+                    </span>
                   </label>
                   <input
                     type="text"
-                    required
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    className="w-full h-10 px-3 bg-zinc-900 border border-white/10 rounded-lg text-xs outline-none focus:border-blue-500 transition-colors"
+                    value={loggedInUser ? loggedInUser.name || loggedInUser.email : userId}
+                    readOnly={!!loggedInUser}
+                    onChange={(e) => !loggedInUser && setUserId(e.target.value)}
+                    className={`w-full h-10 px-3 bg-zinc-900 border rounded-lg text-xs outline-none transition-colors ${
+                      loggedInUser
+                        ? "border-emerald-500/30 text-emerald-300 cursor-default"
+                        : "border-white/10 focus:border-blue-500"
+                    }`}
                   />
+                  {!loggedInUser && (
+                    <p className="text-[10px] text-zinc-600">
+                      Sign in via Navbar to link designs to your account.
+                    </p>
+                  )}
                 </div>
 
                 <button
