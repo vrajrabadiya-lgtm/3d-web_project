@@ -20,7 +20,7 @@ const projectSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["PENDING", "PROCESSING", "COMPLETED", "FAILED"],
+      enum: ["PENDING", "PLANNING", "ASSET_GENERATION", "CODE_GENERATION", "ASSEMBLING", "COMPLETED", "FAILED"],
       default: "PENDING",
     },
     progress: {
@@ -34,6 +34,22 @@ const projectSchema = new mongoose.Schema(
     metadata: {
       type: mongoose.Schema.Types.Mixed,
       default: {},
+    },
+    planning: {
+      type: Object,
+      default: {},
+    },
+    assets: {
+      type: [String],
+      default: [],
+    },
+    generatedCode: {
+      type: Object,
+      default: {},
+    },
+    logs: {
+      type: Array,
+      default: [],
     },
   },
   {
