@@ -7,6 +7,7 @@ import designRoutes from "./routes/designs.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import authRoutes from "./routes/auth.js";
 import projectRoutes from "./routes/projects.js";
+import "./workers/projectWorker.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -43,7 +44,7 @@ app.use(express.json());
 // Routes
 app.use("/api/designs", designRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/api/auth", authRoutes); 
+app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 
 app.get("/", (req, res) => {

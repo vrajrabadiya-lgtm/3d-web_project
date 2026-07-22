@@ -1,6 +1,7 @@
 import express from "express";
 import Project from "../models/Project.js";
 import { authMiddleware } from "./auth.js";
+import { projectQueue } from "../queue/projectQueue.js";
 
 const router = express.Router();
 
@@ -28,6 +29,9 @@ router.post("/", async (req, res) => {
     });
 
     const savedProject = await newProject.save();
+
+    // Enqueue job to be processed by background worker
+    await projectQueue.add("processProject", { projectId: savedProject._id });
 
     return res.status(201).json({
       success: true,
