@@ -16,7 +16,7 @@
 // const testimonialData = [
 //   {
 //     quote:
-//       "I had a portfolio site idea for 2 years. Draftly built it in 8 minutes. I launched the same day.",
+//       "I had a portfolio site idea for 2 years. It was built in 8 minutes. I launched the same day.",
 //     name: "Kenji Nakamura",
 //     designation: "UI Designer",
 //     src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop",
@@ -134,7 +134,7 @@ import Builder from "./components/common/Builder";
 const testimonialData = [
   {
     quote:
-      "I had a portfolio site idea for 2 years. Draftly built it in 8 minutes. I launched the same day.",
+      "I had a portfolio site idea for 2 years. It was built in 8 minutes. I launched the same day.",
     name: "Kenji Nakamura",
     designation: "UI Designer",
     src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop",

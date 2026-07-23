@@ -42,7 +42,7 @@ export default function FeaturesHeroSection() {
                         </h2>
 
                         <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-lg mb-10 font-medium opacity-80">
-                            Describe what you want once. Draftly generates cinematic motion, extracts frames, and builds a scroll-driven 3D website in minutes — not days. Download the ZIP and ship.
+                            Describe what you want once. It generates cinematic motion, extracts frames, and builds a scroll-driven 3D website in minutes — not days. Download the ZIP and ship.
                         </p>
 
                         {/* CTA Buttons Layout */}

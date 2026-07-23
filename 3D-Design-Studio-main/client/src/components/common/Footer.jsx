@@ -56,7 +56,7 @@ export default function Footer() {
                 { label: "SEO Best Practices", href: "#seo" },
                 { label: "API Reference", href: "#api" },
                 { label: "Help Center", href: "#help" },
-                { label: "Draftly Engine", href: "#engine" },
+                { label: "3D Engine", href: "#engine" },
             ],
         },
         {
